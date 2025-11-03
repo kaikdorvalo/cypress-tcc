@@ -1,4 +1,4 @@
-import { baseUrl } from "../config/base-url"
+import { baseUrl, apiUrl } from "../config/base-url"
 
 describe('Editar disciplina', () => {
     beforeEach(() => {
@@ -22,11 +22,11 @@ describe('Editar disciplina', () => {
 
         cy.get('[data-testid="input-discipline-name"]')
             .clear()
-            .type("Disciplina teste edtada")
+            .type("Disciplina teste editada")
         
         cy.get('[data-testid="btn-discipline-actions"]').click()
 
         cy.get('[data-testid="discipline-list"]')
-            .should('contain', 'Disciplina teste editada')
+            .should('contain', "Disciplina teste editada")
     })
 })
