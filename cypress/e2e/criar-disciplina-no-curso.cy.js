@@ -9,22 +9,22 @@ describe('Criar disciplina', () => {
     it("Deve criar disciplina em um curso", () => {
         cy.visit(baseUrl)
 
-    cy.get('[data-testid="btn-create-discipline"]')
-        .should('be.visible')
-        .and('not.be.disabled')
-        .click()
+        cy.get('[data-testid="btn-create-discipline"]')
+            .should('be.visible')
+            .and('not.be.disabled')
+            .click()
 
         cy.get('[data-testid="input-discipline-name"]')
-        .should('be.visible')
-        .type("Disciplina teste")
-        .should('have.value', 'Disciplina teste')
+            .should('be.visible')
+            .type("Disciplina teste")
+            .should('have.value', 'Disciplina teste')
 
         cy.get('[data-testid="btn-discipline-actions"]')
-        .should('be.visible')
-        .and('not.be.disabled')
-        .click()
+            .should('be.visible')
+            .and('not.be.disabled')
+            .click()
 
         cy.get('[data-testid="discipline-list"]')
-        .should('contain', 'Disciplina teste')
+            .should('contain', 'Disciplina teste')
     })
 })

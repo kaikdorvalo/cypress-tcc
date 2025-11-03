@@ -1,52 +1,32 @@
 import { baseUrl } from "../config/base-url"
 
 describe('Editar disciplina', () => {
+    beforeEach(() => {
+        cy.request('DELETE', `${apiUrl}/reset-db`)
+        cy.request('POST', `${apiUrl}/courses`, {
+            name: 'Curso Teste',
+            workload: 50,
+            startDate: '2019-11-15',
+        }).then((response) => {
+            cy.request('POST', `${apiUrl}/course-disciplines/disciplines`, {
+            id: response.body._id,
+            name: 'Disciplina teste',
+            });
+        });
+    })
+
     it("Deve editar uma disciplina em um curso", () => {
         cy.visit(baseUrl)
-        cy.get('.input-nome-curso').type('Curso teste 4')
-        cy.get('.input-carga-horaria').type(50)
 
-        cy.get('.button-open-calendar').click()
-        cy.wait(1000)
+        cy.get('[data-testid="btn-discipline-actions"]').click()
 
-        cy.contains('select', '2025').select('2019')
-        cy.contains('button', '15').click()
-
-        cy.contains('button', 'Criar curso').click()
-        cy.contains('button', 'Confirmar').click()
-        cy.wait(1000)
-
-        cy.contains("div", "Curso teste 4")
-            .parent()
-            .find("button:has(svg.lucide-plus)")
-            .click()
-        
-        cy.contains("div", "Curso teste 4")
-            .parent()
-            .find("div.discipline-card")
-            .find("input")
-            .type("Disciplina teste")
-
-        cy.contains("div", "Curso teste 4")
-            .parent()
-            .find("button:has(svg.lucide-save)")
-            .click()
-
-        cy.contains("div", "Curso teste 4")
-            .parent()
-            .find("div.discipline-card")
-            .find("button:has(svg.lucide-square-pen)")
-            .click()
-            .parent()
-            .parent()
-            .find("input")
+        cy.get('[data-testid="input-discipline-name"]')
             .clear()
-            .type("Disciplina teste editada")
+            .type("Disciplina teste edtada")
+        
+        cy.get('[data-testid="btn-discipline-actions"]').click()
 
-        cy.contains("div", "Curso teste 4")
-            .parent()
-            .find("div.discipline-card")
-            .find("button:has(svg.lucide-save)")
-            .click()
+        cy.get('[data-testid="discipline-list"]')
+            .should('contain', 'Disciplina teste editada')
     })
 })
