@@ -1,6 +1,8 @@
+import { baseUrl } from "../config/base-url"
+
 describe('listagem de curso', () => {
     it('Deve listar os cursos cadastrados', () => {
-        cy.visit('http://localhost:5173')
+        cy.visit(baseUrl)
         cy.get('.input-nome-curso').type('Curso teste 7')
         cy.get('.input-carga-horaria').type(50)
 
@@ -14,7 +16,7 @@ describe('listagem de curso', () => {
         cy.contains('button', 'Criar curso').click()
         cy.contains('button', 'Confirmar').click()
 
-                cy.visit('http://localhost:5173')
+                cy.visit(baseUrl)
         cy.get('.input-nome-curso').type('Curso teste 8')
         cy.get('.input-carga-horaria').type(50)
 

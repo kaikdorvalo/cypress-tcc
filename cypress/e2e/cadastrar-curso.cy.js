@@ -1,25 +1,41 @@
+import { apiUrl, baseUrl } from "../config/base-url"
+
 describe('Cadastro de curso', () => {
+
+    beforeEach(() => {
+        cy.request('DELETE', `${apiUrl}/reset-db`)
+    })
+    
     it('Deve cadastrar um novo curso com sucesso', () => {
-        cy.visit('http://localhost:5173')
-        cy.get('.input-nome-curso').type('Curso teste')
-        cy.get('.input-carga-horaria').type(50)
+        cy.visit(baseUrl)
 
-        cy.get('.button-open-calendar').click()
-        cy.wait(1000)
+        cy.get('[data-testid="input-course-name"]')
+            .should('be.visible')
+            .type('Curso teste')
+            .should('have.value', 'Curso teste')
 
-        cy.contains('select', '2025').select('2019')
-        cy.contains('button', '15').click()
+        cy.get('[data-testid="input-course-workload"]')
+            .should('be.visible')
+            .and('have.attr', 'type', 'number')
+            .type('50')
+            .should('have.value', '50')
 
-        cy.contains('button', 'Criar curso').click()
-        cy.contains('button', 'Confirmar').click()
+        cy.get('[data-testid="button-open-calendar"]')
+            .should('be.visible')
+            .and('not.be.disabled')
+            .click()
 
-        cy.wait(1000)
+        cy.get('[aria-label="Choose the Year"]').should('exist').select('2019')
+        cy.get('[aria-label="Choose the Month"]').should('exist').select('10')
+        cy.get('[data-day="15/11/2019"]').should('be.visible').click()
 
-        cy.get('.div-cursos')
-            .then($divCursos => {
-                if (!$divCursos.text().includes('Curso teste')) {
-                    throw new Error('Curso não cadastrado com sucesso')
-                }
-            })
+
+        cy.get('[data-testid="button-submit"]')
+            .should('be.visible')
+            .click()
+
+        cy.get('[data-testid="button-confirm-alert"]').should('be.visible').click()
+
+        cy.get('[aria-label="Notifications alt+T"]').should('be.visible')
     })
 })

@@ -1,6 +1,8 @@
+import { baseUrl } from "../config/base-url"
+
 describe('exclusão de curso', () => {
     it('Deve excluir um curso', () => {
-        cy.visit('http://localhost:5173')
+        cy.visit(baseUrl)
         cy.get('.input-nome-curso').type('Curso teste 6')
         cy.get('.input-carga-horaria').type(50)
 

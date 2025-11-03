@@ -1,6 +1,8 @@
+import { baseUrl } from "../config/base-url"
+
 describe('Editar curso', () => {
     it("Deve editar um curso existente", () => {
-        cy.visit('http://localhost:5173')
+        cy.visit(baseUrl)
         cy.get('.input-nome-curso').type('Curso teste 3')
         cy.get('.input-carga-horaria').type(50)
 
