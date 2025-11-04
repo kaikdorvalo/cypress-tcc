@@ -18,15 +18,28 @@ describe('Editar disciplina', () => {
     it("Deve editar uma disciplina em um curso", () => {
         cy.visit(baseUrl)
 
-        cy.get('[data-testid="btn-discipline-actions"]').click()
+        cy.get('[data-testid="discipline-list"]').should('be.visible')
+
+        cy.get('[data-testid="btn-discipline-actions"]')
+            .should('be.visible')
+            .and('be.enabled')
+            .click()
+
+        cy.get('[data-testid="input-discipline-name"]')
+            .should('be.visible')
+            .and('not.be.disabled')
 
         cy.get('[data-testid="input-discipline-name"]')
             .clear()
             .type("Disciplina teste editada")
-        
-        cy.get('[data-testid="btn-discipline-actions"]').click()
+            .should('have.value', 'Disciplina teste editada')
+
+        cy.get('[data-testid="btn-discipline-actions"]')
+            .should('be.enabled')
+            .click()
 
         cy.get('[data-testid="discipline-list"]')
-            .should('contain', "Disciplina teste editada")
+            .should('be.visible')
+            .and('contain', 'Disciplina teste editada')
     })
 })

@@ -1,37 +1,20 @@
-import { baseUrl } from "../config/base-url"
+import { baseUrl, apiUrl } from "../config/base-url"
 
 describe('listagem de curso', () => {
+    beforeEach(() => {
+        cy.request('DELETE', `${apiUrl}/reset-db`)
+        cy.request('POST', `${apiUrl}/courses`, { name: 'Curso Teste', workload: 50, startDate: '2019-11-15' })
+        cy.request('POST', `${apiUrl}/courses`, { name: 'Curso Teste 2', workload: 50, startDate: '2018-10-15' })
+    })
+
     it('Deve listar os cursos cadastrados', () => {
         cy.visit(baseUrl)
-        cy.get('.input-nome-curso').type('Curso teste 7')
-        cy.get('.input-carga-horaria').type(50)
 
-        cy.get('.button-open-calendar').click()
-        cy.wait(1000)
+        cy.get('[data-testid="courses-list"]')
+            .contains('Curso Teste')
 
-
-        cy.contains('select', '2025').select('2019')
-        cy.contains('button', '15').click()
-
-        cy.contains('button', 'Criar curso').click()
-        cy.contains('button', 'Confirmar').click()
-
-                cy.visit(baseUrl)
-        cy.get('.input-nome-curso').type('Curso teste 8')
-        cy.get('.input-carga-horaria').type(50)
-
-        cy.get('.button-open-calendar').click()
-        cy.wait(1000)
-
-        cy.contains('select', '2025').select('2019')
-        cy.contains('button', '15').click()
-
-        cy.contains('button', 'Criar curso').click()
-        cy.contains('button', 'Confirmar').click()
-
-        cy.get(".div-cursos")
-            .children()
-            .should('have.length.at.least', 2)
+        cy.get('[data-testid="courses-list"]')
+            .contains('Curso Teste 2')
 
     })
 })

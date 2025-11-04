@@ -1,30 +1,32 @@
-import { baseUrl } from "../config/base-url"
+import { baseUrl, apiUrl } from "../config/base-url"
 
 describe('exclusão de curso', () => {
+    beforeEach(() => {
+        cy.request('DELETE', `${apiUrl}/reset-db`)
+        cy.request('POST', `${apiUrl}/courses`, { name: 'Curso Teste', workload: 50, startDate: '2019-11-15' })
+    })
+
     it('Deve excluir um curso', () => {
         cy.visit(baseUrl)
-        cy.get('.input-nome-curso').type('Curso teste 6')
-        cy.get('.input-carga-horaria').type(50)
 
-        cy.get('.button-open-calendar').click()
-        cy.wait(1000)
+        cy.get('[data-testid="courses-list"]').should('be.visible')
 
-        cy.contains('select', '2025').select('2019')
-        cy.contains('button', '15').click()
-
-        cy.contains('button', 'Criar curso').click()
-        cy.contains('button', 'Confirmar').click()
-
-        cy.wait(1000)
-
-        cy.contains("div", "Curso teste 6")
-            .parent()
-            .find("button:has(svg.lucide-square-pen)")
-            .click()
-            .parent()
-            .find("button:has(svg.lucide-trash)")
+        cy.get('[data-testid="btn-save-or-edit"]')
+            .should('be.visible')
+            .and('be.enabled')
             .click()
 
-        cy.contains('button', 'Confirmar').click()
+        cy.get('[data-testid="btn-delete-course"]')
+            .should('be.visible')
+            .and('be.enabled')
+            .click()
+
+        cy.get('[data-testid="button-confirm-alert"]')
+            .should('be.visible')
+            .and('not.be.disabled')
+            .click()
+
+        cy.get('[aria-label="Notifications alt+T"]')
+            .should('be.visible')
     })
 })
